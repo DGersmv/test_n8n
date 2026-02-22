@@ -8,8 +8,7 @@ declare global {
   }
 }
 
-const WEBHOOK_URL =
-  'https://gdvn8n.app.n8n.cloud/webhook/a2ef5a80-c5d4-4ae0-a995-c7a6b404d5c8';
+const WEBHOOK_URL = 'https://gdvn8n.app.n8n.cloud/webhook/0399bfa8-6e2a-4a9e-8e18-6c41879bd4a5';
 
 export default function Page() {
   const [tabs, setTabs] = useState<string[]>([]);
