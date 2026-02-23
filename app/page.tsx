@@ -31,6 +31,7 @@ export default function Page() {
   const [status, setStatus] = useState<string>('');
   const [results, setResults] = useState<Result[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
+  const [review, setReview] = useState<string>('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -83,6 +84,7 @@ export default function Page() {
       if (j?.results?.length > 0) {
         setResults(j.results);
         setSummary(j.summary || null);
+        setReview(j.review || '');
         setStatus('');
       } else {
         setStatus('🔍 Ничего не найдено');
@@ -157,24 +159,33 @@ export default function Page() {
         </div>
       )}
 
-      {summary && (
+      {(results.length > 0 || review) && (
         <div style={{
           background: '#fff', borderRadius: 12, padding: 16, marginBottom: 12,
           borderLeft: '4px solid #2AABEE'
         }}>
           <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>
-            Найдено предложений: <strong>{summary.count}</strong>
+            Найдено предложений: <strong>{results.length}</strong>
           </div>
-          <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 12, marginBottom: review ? 12 : 0 }}>
             <div style={{ flex: 1, background: '#f0fff4', borderRadius: 8, padding: 10, textAlign: 'center' }}>
               <div style={{ fontSize: 11, color: '#666', marginBottom: 2 }}>Минимум</div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#27ae60' }}>{summary.minPrice}</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: '#27ae60' }}>
+                {results.length > 0 ? Math.min(...results.filter(r => r.price).map(r => Number(r.price))).toLocaleString('ru-RU') + ' ₽' : '—'}
+              </div>
             </div>
             <div style={{ flex: 1, background: '#fff5f5', borderRadius: 8, padding: 10, textAlign: 'center' }}>
               <div style={{ fontSize: 11, color: '#666', marginBottom: 2 }}>Максимум</div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#e74c3c' }}>{summary.maxPrice}</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: '#e74c3c' }}>
+                {results.length > 0 ? Math.max(...results.filter(r => r.price).map(r => Number(r.price))).toLocaleString('ru-RU') + ' ₽' : '—'}
+              </div>
             </div>
           </div>
+          {review && (
+            <div style={{ fontSize: 13, color: '#444', lineHeight: 1.5, borderTop: '1px solid #f0f0f0', paddingTop: 10 }}>
+              {review}
+            </div>
+          )}
         </div>
       )}
 
